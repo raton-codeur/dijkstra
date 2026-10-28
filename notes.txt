@@ -1,15 +1,14 @@
 algorithme de Dijkstra
 
-trouver la plus petite distance entre un noeud de départ n0 et les autres noeuds d'un graphe pondéré.
+trouver la plus petite distance entre un noeud de départ et les autres noeuds d'un graphe pondéré.
 
-à chaque étape, on va vers le noeud qui a la plus petite distance connue depuis le start.
+à chaque étape, on met à jour les voisins du noeud courant et on va vers le noeud du graphe qui a la plus petite distance depuis le start.
+ça fait une complexité en O(V^2 + E) mais avec une implémentation en tas binaire ça devient O((V + E)logV)
 
-on part du noeud A.
-on veut trouver toutes les distances des noeuds avec A.
+quand c'est visited on sait qu'on a la distance minimale définitive, sinon c'est une distance temporaire.
 
-quand c'est visited on sait qu'on a la distance minimale définitive, sinon c'est une distance temporaire ou inf.
+on continue tant qu'il y a des noeuds à visiter.
+si le graphe n'est pas connexe, il faut continuer tant qu'on a un sommet à visiter de distance != inf
 
-"previous" ça permet de savoir quel chemin a conduit à la distance calculée.
-
-objectif : remplir distances et previous. on continue tant qu'il y a des sommets à visiter de distance != inf.
-	pas "tant que len(visited) != len(G.nodes)" car il peut y avoir des noeuds inaccessibles qui garderont inf
+dans pending, je mets les noeuds à visiter et leur distance temporaire.
+c'est pour simplifier mentalement mais on pourrait tout faire avec une liste des "visited".

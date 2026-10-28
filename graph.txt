@@ -1,6 +1,6 @@
 A B 4
-A B 4
 A C 2
+A G 6
 B C 1
 B D 5
 C D 8

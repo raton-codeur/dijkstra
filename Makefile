@@ -7,7 +7,7 @@ install:
 	uv sync
 
 clean:
-	rm -rf .venv uv.lock
+	rm -rf .venv uv.lock states
 	find . -name __pycache__ -exec rm -rf {} +
 
 re: clean install
