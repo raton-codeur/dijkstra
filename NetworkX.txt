@@ -29,6 +29,8 @@ NetworkX
 
 	G.add_edges_from([("A", "B"), ("A", "C"),...
 		optionnel pour éviter de faire plusieurs appels
+	
+	encore plus simple : fichier graph.txt et nx.read_weighted_edgelist("graph.txt")
 
 	dessiner le graphe
 		ça utilise matplotlib

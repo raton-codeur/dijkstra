@@ -13,4 +13,3 @@ quand c'est visited on sait qu'on a la distance minimale définitive, sinon c'es
 
 objectif : remplir distances et previous. on continue tant qu'il y a des sommets à visiter de distance != inf.
 	pas "tant que len(visited) != len(G.nodes)" car il peut y avoir des noeuds inaccessibles qui garderont inf
-

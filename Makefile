@@ -1,4 +1,6 @@
 run:
+	mkdir -p states
+	rm -rf states/*.png
 	uv run main.py
 
 install:

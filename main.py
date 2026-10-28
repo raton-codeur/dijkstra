@@ -1,58 +1,23 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-from dataclasses import dataclass
-from copy import deepcopy
+from matplotlib.patches import Patch
 
-@dataclass
-class State:
-    distances: dict
-    visited: set
-    previous: dict
-    current: str | None
-
-def get_graph():
-    result = nx.Graph()
-    result.add_edge("A", "B", weight=4)
-    result.add_edge("A", "B", weight=4)
-    result.add_edge("A", "C", weight=2)
-    result.add_edge("B", "C", weight=1)
-    result.add_edge("B", "D", weight=5)
-    result.add_edge("C", "D", weight=8)
-    result.add_edge("C", "E", weight=10)
-    result.add_edge("D", "E", weight=2)
-    result.add_edge("D", "F", weight=6)
-    result.add_edge("E", "F", weight=3)
-    return result
-G = get_graph()
+G = nx.read_weighted_edgelist("graph.txt")
 pos = nx.spring_layout(G, seed=0)
 
-states = []
-state = State(
-    distances={node: float("inf") for node in G.nodes},
-    visited=set(),
-    previous={node: None for node in G.nodes},
-    current="A"
-)
-state.distances["A"] = 0
-states.append(deepcopy(state))
+distances = {node: float("inf") for node in G.nodes}
+distances["A"] = 0
+visited=set()
+previous={node: None for node in G.nodes}
+current="A"
+i_step = 0
 
-def draw_state(G, state):
-    
+def save():
+    global i_step
 
+    plt.figure()
 
-
-# def print_graph(G):
-#     pos = nx.spring_layout(G)
-#     nx.draw(G, pos, with_labels=True)
-#     weights = nx.get_edge_attributes(G, "weight")
-#     nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
-#     plt.show()
-# print_graph(G)
-
-def draw_state(G, distances, previous, visited, current=None):
-    pos = nx.spring_layout(G, seed=42)
-
-    # Colors for each node
+    # node colors
     colors = []
     for node in G.nodes:
         if node == current:
@@ -64,57 +29,41 @@ def draw_state(G, distances, previous, visited, current=None):
         else:
             colors.append("lightgray")
 
-    # Node labels: name + distance
-    labels = {}
-    for node in G.nodes:
-        distance = distances[node]
-        labels[node] = f"{node}\n{distance}"
+    # node labels
+    labels = {
+        node: f"{node}\n{distances[node]}"
+        for node in G.nodes
+    }
 
-    # Draw the graph
-    nx.draw(
-        G, pos,
-        labels=labels,
-        with_labels=True,
-        node_color=colors,
-        node_size=1100
-    )
+    nx.draw(G, pos, with_labels=True, labels=labels, node_color=colors, node_size=2000)
+    weights = {
+        edge: int(weight)
+        for edge, weight in nx.get_edge_attributes(G, "weight").items()
+    }
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=weights, font_size=12)
 
-    # Highlight predecessor edges
-    path_edges = [
-        (parent, node)
-        for node, parent in previous.items()
-        if parent is not None
-    ]
+    plt.legend(handles=[
+        Patch(color="red", label="Current"),
+        Patch(color="lightgreen", label="Visited"),
+        Patch(color="lightblue", label="Discovered"),
+        Patch(color="lightgray", label="Unknown")
+    ])
 
-    nx.draw_networkx_edges(
-        G, pos,
-        edgelist=path_edges,
-        edge_color="green",
-        width=3
-    )
+    plt.savefig(f"states/step{i_step}.png")
+    i_step += 1
+    plt.close()
 
-    # Display edge weights
-    weights = nx.get_edge_attributes(G, "weight")
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
-
-    plt.show()
+save()
+current = "B"
+save()
 
 
+# def print_graph(G):
+#     pos = nx.spring_layout(G)
+#     nx.draw(G, pos, with_labels=True)
+#     weights = nx.get_edge_attributes(G, "weight")
+#     nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
+#     plt.show()
+# print_graph(G)
 
-# graphe = {
-#     "A": {"B": 4, "C": 2},
-#     "B": {"A": 4, "C": 1, "D": 5},
-#     "C": {"A": 2, "B": 1, "D": 3},
-#     "D": {"B": 5, "C": 3}
-# }
-# start = "A"
-# end = "D"
-# distances = {noeud: float("inf") for noeud in graphe}
-# distances[start] = 0
-# visited = set()
 
-# def main():
-#     print("test")
-
-# if __name__ == "__main__":
-#     main()
