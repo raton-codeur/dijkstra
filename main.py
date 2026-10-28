@@ -1,23 +1,45 @@
 import networkx as nx
 import matplotlib.pyplot as plt
+from dataclasses import dataclass
+from copy import deepcopy
 
-G = nx.Graph()
-G.add_edge("A", "B", weight=4)
-G.add_edge("A", "B", weight=4)
-G.add_edge("A", "C", weight=2)
-G.add_edge("B", "C", weight=1)
-G.add_edge("B", "D", weight=5)
-G.add_edge("C", "D", weight=8)
-G.add_edge("C", "E", weight=10)
-G.add_edge("D", "E", weight=2)
-G.add_edge("D", "F", weight=6)
-G.add_edge("E", "F", weight=3)
+@dataclass
+class State:
+    distances: dict
+    visited: set
+    previous: dict
+    current: str | None
+
+def get_graph():
+    result = nx.Graph()
+    result.add_edge("A", "B", weight=4)
+    result.add_edge("A", "B", weight=4)
+    result.add_edge("A", "C", weight=2)
+    result.add_edge("B", "C", weight=1)
+    result.add_edge("B", "D", weight=5)
+    result.add_edge("C", "D", weight=8)
+    result.add_edge("C", "E", weight=10)
+    result.add_edge("D", "E", weight=2)
+    result.add_edge("D", "F", weight=6)
+    result.add_edge("E", "F", weight=3)
+    return result
+G = get_graph()
 pos = nx.spring_layout(G, seed=0)
 
-distances = {node: float("inf") for node in G.nodes}
-distances["A"] = 0
-visited = set()
-previous = {node: None for node in G.nodes}
+states = []
+state = State(
+    distances={node: float("inf") for node in G.nodes},
+    visited=set(),
+    previous={node: None for node in G.nodes},
+    current="A"
+)
+state.distances["A"] = 0
+states.append(deepcopy(state))
+
+def draw_state(G, state):
+    
+
+
 
 # def print_graph(G):
 #     pos = nx.spring_layout(G)

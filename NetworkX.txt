@@ -1,0 +1,66 @@
+NetworkX
+	bibliothèque Python → manipulation des graphes
+
+	import networkx as nx
+
+	G = nx.Graph()
+		graphe vide, non orienté
+
+		nx.DiGraph() pour orienté
+
+	G.add_node("A")
+		on peut rajouter tout ce qu'on veut. exemple :
+			G.add_node("A", distance=0, visite=False)
+
+	G.nodes → sommets (vue NetworkX → on peut notamment utiliser list())
+	G.edges → arêtes (vue NetworkX → on peut notamment utiliser list())
+	G.nodes["A"] → dictionnaire du "noeud A" donc tous les attributs du noeud A
+	G["A"] → les voisins du noeud "A" et les attributs des arêtes
+		avec dict(G["A"]) c'est pas mal
+
+		si on veut juste les voisins c'est mieux : list(G.neighbors("A"))
+	G["A"]["B"] → "l'objet arête entre les noeuds A et B". notamment : G["A"]["B"]["weight"]
+
+	G.add_edge("A", "B")
+		ça crée les noeuds s'ils existent pas
+
+		ajouter du poids
+			G.add_edge("A", "B", weight=4)
+
+	G.add_edges_from([("A", "B"), ("A", "C"),...
+		optionnel pour éviter de faire plusieurs appels
+
+	dessiner le graphe
+		ça utilise matplotlib
+
+		nx.draw(G)
+			NetworkX choisit tout seul où dessiner.
+			par défaut : pas de label de sommet ni arête
+
+		choisir les emplacements des sommets avant de draw
+			on crée "pos" et on l'envoie en deuxième param à draw :
+				nx.draw(G, pos)
+
+			créer "pos"
+				à la main
+					pos = {"A": [0, 0], "B": [0, 1]}
+
+				sinon
+					pos = nx.spring_layout(G, seed=42)
+						seed pour fixer l'aléatoire
+					autre :
+						nx.circular_layout(G) → en cercle
+						nx.shell_layout(G) → en cercles concentriques
+						nx.random_layout(G) → positions aléatoires
+						nx.planar_layout(G) → sans croisement d'arête (si possible)
+
+		dessiner avec les noms des sommets
+			nx.draw(G, with_labels=True)
+
+		dessiner avec les poids des arêtes
+			pos = ...
+			nx.draw(...
+			weights = nx.get_edge_attributes(G, "weight")
+			nx.draw_networkx_edge_labels(G, pos, edge_labels=weights)
+
+		et afficher avec plt.show()
